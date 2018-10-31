@@ -21,6 +21,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/*
+ * David Hau
+ * 10/30/2018
+ * CS2450.02(F18)
+ */
 public class Main extends Application
 {
 	public boolean gameOver = false;
@@ -42,11 +47,11 @@ public class Main extends Application
 	public Image diceFiveHeldImage = new Image("file:./Dice5held.png");
 	public Image diceSixHeldImage = new Image("file:./Dice6held.png");
 	
-	public ImageView diceOne = new ImageView(diceOneImage);
-	public ImageView diceTwo = new ImageView(diceOneImage);
-	public ImageView diceThree = new ImageView(diceOneImage);
-	public ImageView diceFour = new ImageView(diceOneImage);
-	public ImageView diceFive = new ImageView(diceOneImage);
+	public ImageView diceOne = new ImageView(rollDice());
+	public ImageView diceTwo = new ImageView(rollDice());
+	public ImageView diceThree = new ImageView(rollDice());
+	public ImageView diceFour = new ImageView(rollDice());
+	public ImageView diceFive = new ImageView(rollDice());
 	
 	public ImageView[] diceImages = {diceOne, diceTwo, diceThree, diceFour, diceFive};
 
@@ -80,6 +85,7 @@ public class Main extends Application
 		menuBar.getMenus().addAll(fileMenu, helpMenu);
 		fileMenu.getItems().addAll(newGame,  new SeparatorMenuItem(), exit);
 		helpMenu.getItems().addAll(howToPlay);
+
 		
 		newGame.setOnAction(event -> {
 			newGame();
@@ -132,6 +138,12 @@ public class Main extends Application
 		
 		HBox dices = new HBox(20, diceOne, diceTwo, diceThree, diceFour, diceFive);
 		
+		overallScore.setStyle("-fx-font-size: 20pt; -fx-text-fill: rgba(225, 225, 225, 1); -fx-font-family: Verdana");
+		currentScore.setStyle("-fx-font-size: 20pt; -fx-text-fill: rgba(225, 225, 225, 1); -fx-font-family: Verdana");
+		rollsLeft.setStyle("-fx-font-size: 20pt; -fx-text-fill: rgba(225, 225, 225, 1); -fx-font-family: Verdana");
+		handCombo.setStyle("-fx-font-size: 20pt; -fx-text-fill: rgba(225, 225, 225, 1); -fx-font-family: Verdana");
+		actionButton.setStyle("-fx-font-size: 20pt; ; -fx-font-family: Verdana");
+		
 		VBox vbox = new VBox(20, overallScore, dices, actionButton, currentScore, rollsLeft, handCombo);
 		vbox.setPadding(new Insets(10));
 		
@@ -139,8 +151,8 @@ public class Main extends Application
 		
 		borderPane.setTop(menuBar);
 		borderPane.setCenter(vbox);
-		borderPane.setStyle("-fx-background-color: blue");
-		borderPane.setStyle("-fx-text-color: white");
+		borderPane.setStyle("-fx-background-color: linear-gradient(#141478,\r\n" + 
+				"#1e1e99)");
 		
 		Scene myScene = new Scene(borderPane);
 		
@@ -158,49 +170,31 @@ public class Main extends Application
 		alert.setTitle("How to Play");
 		alert.setHeaderText("");
 		alert.show();
-		/*
-		Button ok = new Button("Ok");
-		ok.setAlignment(Pos.BOTTOM_CENTER);
-		
-		ok.setOnAction(event -> {
-			primaryStage.setScene(primaryScene);
-			//primaryStage.show();
-		});
-		
-		BorderPane borderPane = new BorderPane();
-		
-		Text text = new Text(showInformation());
-		VBox hbox = new VBox(20, text, ok);
-		hbox.setPadding(new Insets(10));
-		hbox.setAlignment(Pos.BOTTOM_CENTER);
-		
-		borderPane.setTop(menuBar);
-		borderPane.setCenter(hbox);
-		
-		Scene scene = new Scene(borderPane);
-		
-		primaryStage.setScene(scene);
-		primaryStage.show();
-		*/
 	}
 	
 	public String showInformation()
 	{
-		return "Rules:\r\n" + 
-				"\r\n" + 
-				"The player has three rolls per turn. \r\n" + 
-				"After the first roll, if the user clicks a dice, it will remain \"held\" and not roll the next time the user rolls the dice. Its image should update accordingly. \r\n" + 
-				"Once three rolls are up, determine what is the best \"hand\" the user has. Inform the user of what hand they have and how many points they received this round.\r\n" + 
-				"The \"Roll\" button should say \"Play Again\" once the player's turn is over. This should clear the Dice, allowing the user to start over.\r\n" + 
-				"Keep track of how many points overall the user has (i.e. keep a running total of how much they scored each turn)\n\n" +
-				"Hands:\r\n\n" + 
-				"5 of a kind - 10 points\r\n" + 
-				"Straight (5 numbers in a row i.e. 1, 2, 3, 4, 5 or 2, 3, 4, 5, 6) - 8 points\r\n" + 
-				"Four of a Kind - 7 points\r\n" + 
-				"Full House (3 of one kind, 2 of another) - 6 points\r\n" + 
-				"3 of a kind - 5 points\r\n" + 
-				"2 pair (2 of one kind, 2 of another, and 1 other value) - 4 points\r\n" + 
-				"2 of a kind - 1 point";
+		return "Rules:\r\n"
+				+ "\r\n"
+				+ "The player has three rolls per turn. \r\n"
+				+ "After the first roll, if the user clicks a dice, it will remain "
+				+ "\"held\" and not roll the next time the user rolls the dice."
+				+ " Its image should update accordingly. \r\n"
+				+ "Once three rolls are up, determine what is the best \"hand\" the "
+				+ "user has. Inform the user of what hand they have and how many "
+				+ "points they received this round.\r\n"
+				+ "The \"Roll\" button should say \"Play Again\" once the player's "
+				+ "turn is over. This should clear the Dice, allowing the user to start over.\r\n"
+				+ "Keep track of how many points overall the user has (i.e. keep a "
+				+ "running total of how much they scored each turn)\n\n"
+				+ "Hands:\r\n\n" 
+				+ "5 of a kind - 10 points\r\n"
+				+ "Straight (5 numbers in a row i.e. 1, 2, 3, 4, 5 or 2, 3, 4, 5, 6) - 8 points\r\n"
+				+ "Four of a Kind - 7 points\r\n"
+				+ "Full House (3 of one kind, 2 of another) - 6 points\r\n"
+				+ "3 of a kind - 5 points\r\n"
+				+ "2 pair (2 of one kind, 2 of another, and 1 other value) - 4 points\r\n"
+				+ "2 of a kind - 1 point";
 	}
 	
 	public void changeImage(ImageView currentImage)
@@ -503,51 +497,85 @@ public class Main extends Application
 	public void roll()
 	{
 		Random random = new Random();
-		for(ImageView image: diceImages)
+		for(int num = 0; num < diceImages.length; num++)
 		{
 			int rand = (random.nextInt() % 6) + 1;
-			if(!(image.getImage().equals(diceOneHeldImage)) 
-					|| (image.getImage().equals(diceTwoHeldImage)) 
-					|| (image.getImage().equals(diceThreeHeldImage)) 
-					|| (image.getImage().equals(diceFourHeldImage)) 
-					|| (image.getImage().equals(diceFiveHeldImage)) 
-					|| (image.getImage().equals(diceSixHeldImage)))
+			if(!((diceImages[num].getImage().equals(diceOneHeldImage)) 
+					|| (diceImages[num].getImage().equals(diceTwoHeldImage)) 
+					|| (diceImages[num].getImage().equals(diceThreeHeldImage)) 
+					|| (diceImages[num].getImage().equals(diceFourHeldImage)) 
+					|| (diceImages[num].getImage().equals(diceFiveHeldImage)) 
+					|| (diceImages[num].getImage().equals(diceSixHeldImage))))
 			{
 				if(rand == 1)
 				{
-					image.setImage(diceOneImage);
+					diceImages[num].setImage(diceOneImage);
 				}
 				else if(rand == 2)
 				{
-					image.setImage(diceTwoImage);
+					diceImages[num].setImage(diceTwoImage);
 				}
 				else if(rand == 3)
 				{
-					image.setImage(diceThreeImage);
+					diceImages[num].setImage(diceThreeImage);
 				}
 				else if(rand == 4)
 				{
-					image.setImage(diceFourImage);
+					diceImages[num].setImage(diceFourImage);
 				}
 				else if(rand == 5)
 				{
-					image.setImage(diceFiveImage);
+					diceImages[num].setImage(diceFiveImage);
 				}
 				else if(rand == 6)
 				{
-					image.setImage(diceSixImage);
+					diceImages[num].setImage(diceSixImage);
 				}
 			}
 		}
+	}
+	
+	public Image rollDice()
+	{
+		Random random = new Random();
+		int rand = (random.nextInt() % 6) + 1;
 		
-		
+		if(rand == 1)
+		{
+			return diceOneImage;
+		}
+		else if(rand == 2)
+		{
+			return diceTwoImage;
+		}
+		else if(rand == 3)
+		{
+			return diceThreeImage;
+		}
+		else if(rand == 4)
+		{
+			return diceFourImage;
+		}
+		else if(rand == 5)
+		{
+			return diceFiveImage;
+		}
+		else if(rand == 6)
+		{
+			return diceSixImage;
+		}
+		else
+		{
+			return diceOneImage;
+		}
 	}
 	
 	public void newGame()
 	{
-		for(ImageView dice: diceImages)
+		
+		for(int num = 0; num < diceImages.length; num++)
 		{
-			dice.setImage(diceOneImage);
+			diceImages[num].setImage(rollDice());
 		}
 		
 		gameOver = false;
